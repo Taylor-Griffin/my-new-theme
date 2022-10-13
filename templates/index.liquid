@@ -1,7 +1,38 @@
 {% assign mainProduct = all_products['fitra-activity-band'] %}
 
-{{ mainProduct.title }}
-{{ mainProduct.description }}
-{% for product in mainProduct.images %}
-  <img src="{{ product | image_url: width: 450, height: 450 }} loading='lazy'">
-{% endfor %}
+<h1>{{ mainProduct.title }}</h1>
+<div id="product-images">
+  {% for product in mainProduct.images %}
+    <div class="single-product-image">
+      <img src="{{ product | image_url: width: 450, height: 450 }}" loading="lazy">
+    </div>
+  {% endfor %}
+</div>
+<div id="product-info">
+  <div class="headline">
+    <h2>{{ 'product.copy.headline' | t }}</h2>
+  </div>
+  <h3>{{ 'product.copy.description_headline' | t }}</h3>
+  <div class="description">{{ mainProduct.description }}</div>
+  <div class="details">
+    <ul>
+      <li>{{ 'product.details_list.item1' | t }}</li>
+      <li>{{ 'product.details_list.item2' | t }}</li>
+    </ul>
+  </div>
+
+  <div class="form-wrapper">
+    <form action="/cart/add" method="post" enctype="multipart/form-data" id="AddToCartForm">
+      <label for="productSelect">{{ mainProduct.options.first }}</label>
+      <select name="id" id="productSelect">
+        {% for variant in mainProduct.variants %}
+          <option value="{{ variant.id }}">{{ variant.title }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit" name="add" id="AddToCart">
+        Add to cart
+        <span class="product-price">{{ mainProduct.price | money_without_trailing_zeros }}</span>
+      </button>
+    </form>
+  </div>
+</div>
